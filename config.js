@@ -1,10 +1,10 @@
 /*
 SR Follow-ups Playbook live configuration.
-Source: normal Google Sheet URL.
+Source: native Google Sheet.
 */
 
 window.PLAYBOOK_CONFIG = {
-  spreadsheetId: "1eHu8ubYMewWz2GucQqpLhTgaRbVwllVB",
+  spreadsheetId: "1KQsHscGA8OhX8eUNQMvlA4G4K1IZv4XWJ9KX1eOoHMI",
   range: "A:K",
   flowOrder: ["Before Showroom", "Follow up", "Future"],
   languages: {
