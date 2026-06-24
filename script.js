@@ -245,14 +245,25 @@ function matrixFromGoogleVisualization(response) {
     ...table.rows.map(row => row.c ? row.c.length : 0),
     DATA_KEYS.length
   );
-  return table.rows.map(row => {
+  const matrix = [];
+
+  // Google Visualization may promote the real spreadsheet header row into table.cols.
+  // Add those labels back into the matrix so header detection still works.
+  const colLabels = (table.cols || []).map(col => cleanValue(col.label || col.id || ""));
+  if (colLabels.some(label => canonicalHeaderKey(label))) {
+    while (colLabels.length < colCount) colLabels.push("");
+    matrix.push(colLabels.slice(0, colCount));
+  }
+
+  table.rows.forEach(row => {
     const out = [];
     for (let i = 0; i < colCount; i++) {
       const cell = row.c && row.c[i] ? row.c[i] : null;
       out.push(cleanCell(cell));
     }
-    return out;
+    matrix.push(out);
   });
+  return matrix;
 }
 
 function cleanCell(cell) {
@@ -264,16 +275,31 @@ function cleanCell(cell) {
 
 function rowsFromMatrix(matrix) {
   const headerInfo = findHeaderInfo(matrix);
-  if (!headerInfo) throw new Error("Could not find the Flow / Objective / Inner flow / Step header row.");
+  if (!headerInfo) return rowsFromFixedColumns(matrix);
   const labels = labelsFromHeader(headerInfo);
+  const output = recordsFromRows(matrix, headerInfo.columnKeys, headerInfo.rowIndex + 1);
+  if (!output.length) return rowsFromFixedColumns(matrix);
+  return { rows: output, labels };
+}
+
+function rowsFromFixedColumns(matrix) {
+  // Fallback for Google Sheets cases where row 3 is treated as labels, hidden, or skipped.
+  // The master table order is fixed: Flow, Objective, Inner flow, Step, Trigger, Action, Time, Speech, Reply, No reply, Template.
+  const fixedKeys = ["flow", "objective", "inner_flow", "step", "trigger", "action", "time", "speech", "if_reply", "if_no_reply", "template"];
+  const output = recordsFromRows(matrix, fixedKeys, 0);
+  if (!output.length) throw new Error("Could not read usable SR follow-up rows from columns A:K. Check that the selected tab has Flow in column A and Step in column D.");
+  return { rows: output, labels: { ...DEFAULT_LABELS } };
+}
+
+function recordsFromRows(matrix, columnKeys, startRowIndex) {
   let currentFlow = "";
   let currentObjective = "";
   let currentInner = "";
   const output = [];
-  for (let rowIndex = headerInfo.rowIndex + 1; rowIndex < matrix.length; rowIndex++) {
+  for (let rowIndex = startRowIndex; rowIndex < matrix.length; rowIndex++) {
     const sourceRow = matrix[rowIndex] || [];
     const record = emptyRecord();
-    headerInfo.columnKeys.forEach((key, index) => {
+    columnKeys.forEach((key, index) => {
       if (!key) return;
       const value = cleanValue(sourceRow[index]);
       if (value) record[key] = value;
@@ -291,7 +317,7 @@ function rowsFromMatrix(matrix) {
     if (!hasUsefulData(record)) continue;
     output.push(record);
   }
-  return { rows: output, labels };
+  return output;
 }
 
 function findHeaderInfo(matrix) {
@@ -330,16 +356,18 @@ function disambiguateColumnKeys(keys) {
 function canonicalHeaderKey(value) {
   const n = norm(value).replace(/[_-]+/g, " ").replace(/\s+/g, " ");
   if (!n) return "";
-  if (n === "flow" || n.includes("flow")) return "flow";
+
+  // Specific checks must come before generic flow/action/reply checks.
+  if (n === "inner flow" || n === "innerflow" || n.includes("inner flow")) return "inner_flow";
+  if (n === "flow") return "flow";
   if (n === "objective" || n.includes("objective")) return "objective";
-  if (n === "inner flow" || n === "innerflow") return "inner_flow";
   if (n === "step" || n === "steps") return "step";
   if (n.includes("trigger")) return "trigger";
   if (n === "action" || n.includes("action")) return "action";
   if (n === "time" || n === "timing" || n.includes("timing")) return "time";
   if (n.includes("template speech") || n.includes("template script") || n.includes("speech") || n.includes("script") || n.includes("vorlage") || n.includes("gesprachsleitfaden") || n.includes("modele")) return "speech";
-  if ((n.includes("answer") || n.includes("reply") || n.includes("antwort") || n.includes("reponse") || n.includes("risposta")) && !n.includes("no") && !n.includes("keine") && !n.includes("aucune") && !n.includes("nessuna")) return "if_reply";
   if (n.includes("no answer") || n.includes("no reply") || n.includes("keine antwort") || n.includes("aucune reponse") || n.includes("nessuna risposta") || n.includes("kein feedback") || n.includes("nessun riscontro")) return "if_no_reply";
+  if ((n.includes("answer") || n.includes("reply") || n.includes("antwort") || n.includes("reponse") || n.includes("risposta")) && !n.includes("no") && !n.includes("keine") && !n.includes("aucune") && !n.includes("nessuna")) return "if_reply";
   if (n === "template") return "template";
   if (n.includes("rule")) return "rules";
   if (n.includes("note")) return "extra";

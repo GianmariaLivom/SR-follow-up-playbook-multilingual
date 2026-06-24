@@ -1,6 +1,6 @@
 /*
 SR Follow-ups Playbook live configuration.
-Source: native Google Sheet, using sheet GIDs.
+Source: native Google Sheet, using verified sheet GIDs and sheet-name fallback.
 */
 
 window.PLAYBOOK_CONFIG = {
@@ -10,22 +10,22 @@ window.PLAYBOOK_CONFIG = {
   languages: {
     it: {
       label: "Italian",
-      sheetNames: [],
+      sheetNames: ["Italian - Master Table - SR Fol"],
       gid: "1500932613"
     },
     en: {
       label: "English",
-      sheetNames: [],
+      sheetNames: ["Master Table - SR Follow up"],
       gid: "1411724643"
     },
     fr: {
       label: "French",
-      sheetNames: [],
+      sheetNames: ["French - Master Table - SR Foll"],
       gid: "343677981"
     },
     de: {
       label: "German",
-      sheetNames: [],
+      sheetNames: ["German - Master Table - SR Foll"],
       gid: "1136156832"
     }
   }
