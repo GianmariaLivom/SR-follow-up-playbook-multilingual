@@ -1,0 +1,141 @@
+{
+  "allSheets": [
+    "Definitions",
+    "Master Table",
+    "Master Table - All Speeches",
+    "Master Table - SR Follow up",
+    "German - Master Table - SR Foll",
+    "French - Master Table - SR Foll",
+    "Italian - Master Table - SR Fol"
+  ],
+  "targetSheets": {
+    "en": {
+      "sheetName": "Master Table - SR Follow up",
+      "headersAtoK": [
+        "Flow",
+        "Objective",
+        "Inner flow",
+        "Step",
+        "What triggers the step",
+        "Action",
+        "Time",
+        "Template/Speech",
+        "If answer / reply",
+        "If no answer / no reply",
+        "If No Answer / No Reply"
+      ],
+      "rowCount": 37,
+      "flowCounts": {
+        "Before Showroom": 8,
+        "Follow up": 17,
+        "Future": 12
+      },
+      "innerFlowCounts": {
+        "Before Showroom / Appointment reminders": 3,
+        "Before Showroom / Cancellation recovery": 4,
+        "Before Showroom / No-show recovery": 1,
+        "Follow up / SR Appointment \nOr\nSR Visit Planned attended": 5,
+        "Follow up / Expired payment \nOr\nCancelled Order": 6,
+        "Follow up / Pending Payment": 6,
+        "Future / Last attempt flow": 7,
+        "Future / Drop in not planned\n& \nno configuration\n&\nno follow up email sent\n&\nFuture interest": 5
+      }
+    },
+    "de": {
+      "sheetName": "German - Master Table - SR Foll",
+      "headersAtoK": [
+        "Flow",
+        "Objective",
+        "Inner flow",
+        "Step",
+        "What triggers the step",
+        "Action",
+        "Time",
+        "Vorlage/Gesprächsleitfaden",
+        "If answer / reply",
+        "If no answer / no reply",
+        "Wenn keine Antwort / keine Rückmeldung"
+      ],
+      "rowCount": 37,
+      "flowCounts": {
+        "Before Showroom": 8,
+        "Follow up": 17,
+        "Future": 12
+      },
+      "innerFlowCounts": {
+        "Before Showroom / Appointment reminders": 3,
+        "Before Showroom / Cancellation recovery": 4,
+        "Before Showroom / No-show recovery": 1,
+        "Follow up / SR Appointment \nOr\nSR Visit Planned attended": 5,
+        "Follow up / Expired payment \nOr\nCancelled Order": 6,
+        "Follow up / Pending Payment": 6,
+        "Future / Last attempt flow": 7,
+        "Future / Drop in not planned\n& \nno configuration\n&\nno follow up email sent\n&\nFuture interest": 5
+      }
+    },
+    "fr": {
+      "sheetName": "French - Master Table - SR Foll",
+      "headersAtoK": [
+        "Flow",
+        "Objective",
+        "Inner flow",
+        "Step",
+        "What triggers the step",
+        "Action",
+        "Time",
+        "Modèle/Script",
+        "If answer / reply",
+        "If no answer / no reply",
+        "Si aucune réponse / aucun retour"
+      ],
+      "rowCount": 37,
+      "flowCounts": {
+        "Before Showroom": 8,
+        "Follow up": 17,
+        "Future": 12
+      },
+      "innerFlowCounts": {
+        "Before Showroom / Appointment reminders": 3,
+        "Before Showroom / Cancellation recovery": 4,
+        "Before Showroom / No-show recovery": 1,
+        "Follow up / SR Appointment \nOr\nSR Visit Planned attended": 5,
+        "Follow up / Expired payment \nOr\nCancelled Order": 6,
+        "Follow up / Pending Payment": 6,
+        "Future / Last attempt flow": 7,
+        "Future / Drop in not planned\n& \nno configuration\n&\nno follow up email sent\n&\nFuture interest": 5
+      }
+    },
+    "it": {
+      "sheetName": "Italian - Master Table - SR Fol",
+      "headersAtoK": [
+        "Flow",
+        "Objective",
+        "Inner flow",
+        "Step",
+        "What triggers the step",
+        "Action",
+        "Time",
+        "Template/Script",
+        "If answer / reply",
+        "If no answer / no reply",
+        "Se nessuna risposta / nessun riscontro"
+      ],
+      "rowCount": 37,
+      "flowCounts": {
+        "Before Showroom": 8,
+        "Follow up": 17,
+        "Future": 12
+      },
+      "innerFlowCounts": {
+        "Before Showroom / Appointment reminders": 3,
+        "Before Showroom / Cancellation recovery": 4,
+        "Before Showroom / No-show recovery": 1,
+        "Follow up / SR Appointment \nOr\nSR Visit Planned attended": 5,
+        "Follow up / Expired payment \nOr\nCancelled Order": 6,
+        "Follow up / Pending Payment": 6,
+        "Future / Last attempt flow": 7,
+        "Future / Drop in not planned\n& \nno configuration\n&\nno follow up email sent\n&\nFuture interest": 5
+      }
+    }
+  }
+}

@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SR Follow-ups Playbook</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Livom Sales</p>
+      <h1>SR Follow-ups Playbook</h1>
+      <p class="subtitle">Before Showroom → Follow up → Future</p>
+    </div>
+    <div class="hero-side">
+      <div id="languageSwitcher" class="language-switcher" aria-label="Language selector"></div>
+      <div id="sourcePill" class="source-pill">Select language</div>
+    </div>
+  </header>
+
+  <main>
+    <section id="languageGate" class="language-gate">
+      <div class="panel gate-panel">
+        <p class="section-kicker">Select language</p>
+        <h2>Choose a language to open the playbook</h2>
+        <p class="panel-description">Nothing opens until a language is selected.</p>
+        <div id="gateLanguageGrid" class="grid language-grid"></div>
+      </div>
+    </section>
+
+    <section id="appLayout" class="layout hidden">
+      <aside class="sidebar">
+        <label for="searchInput">Search</label>
+        <input id="searchInput" type="search" placeholder="Search steps, templates, actions…" />
+
+        <label for="channelFilter">Channel</label>
+        <select id="channelFilter">
+          <option value="">All channels</option>
+        </select>
+
+        <button id="resetBtn" class="secondary" type="button">Reset filters</button>
+
+        <div class="legend">
+          <strong>Structure</strong>
+          <span>1. Select a flow</span>
+          <span>2. Select an inner flow</span>
+          <span>3. Read/copy the steps</span>
+        </div>
+      </aside>
+
+      <section class="content">
+        <nav id="breadcrumbs" class="breadcrumbs" aria-label="Breadcrumbs"></nav>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <p class="section-kicker">Layer 1</p>
+              <h2>Flows</h2>
+            </div>
+            <span id="flowCount" class="count">0 flows</span>
+          </div>
+          <div id="flowGrid" class="grid"></div>
+        </section>
+
+        <section id="innerPanel" class="panel hidden">
+          <div class="panel-head">
+            <div>
+              <p class="section-kicker">Layer 2</p>
+              <h2 id="innerPanelTitle">Inner flows</h2>
+            </div>
+            <span id="innerCount" class="count">0 inner flows</span>
+          </div>
+          <p id="flowObjective" class="panel-description"></p>
+          <div id="innerGrid" class="grid"></div>
+        </section>
+
+        <section id="stepsPanel" class="panel hidden">
+          <div class="panel-head">
+            <div>
+              <p class="section-kicker">Layer 3</p>
+              <h2 id="stepsPanelTitle">Steps</h2>
+            </div>
+            <div class="panel-actions">
+              <span id="stepCount" class="count">0 rows</span>
+              <button id="expandAllBtn" type="button">Expand all</button>
+            </div>
+          </div>
+          <p id="innerDescription" class="panel-description"></p>
+          <div id="stepsContainer" class="steps"></div>
+        </section>
+      </section>
+    </section>
+  </main>
+
+  <script src="config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
