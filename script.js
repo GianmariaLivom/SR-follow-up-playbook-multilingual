@@ -1,3 +1,4 @@
+const APP_VERSION = "2026-06-24-final-fix-v1";
 const CONFIG = window.PLAYBOOK_CONFIG || {};
 const LANGUAGE_ORDER = ["it", "en", "fr", "de"];
 const DEFAULT_FLOW_ORDER = ["Before Showroom", "Follow up", "Future"];
@@ -100,7 +101,7 @@ function showGate() {
   selectedInner = null;
   el.languageGate.classList.remove("hidden");
   el.appLayout.classList.add("hidden");
-  el.sourcePill.textContent = "Select language";
+  el.sourcePill.textContent = `Select language · ${APP_VERSION}`;
   refreshLanguageButtons();
 }
 
@@ -142,7 +143,7 @@ async function loadLanguage(code) {
     populateFilters();
     el.languageGate.classList.add("hidden");
     el.appLayout.classList.remove("hidden");
-    el.sourcePill.textContent = `Source: Google Sheet · ${meta.label || code}`;
+    el.sourcePill.textContent = `Source: Google Sheet · ${meta.label || code} · ${APP_VERSION}`;
     selectedFlow = rows.some(r => sameFlow(r.flow, oldFlow)) ? canonicalFlowName(oldFlow) : null;
     selectedInner = selectedFlow && rows.some(r => r.flow === selectedFlow && r.inner_flow === oldInner) ? oldInner : null;
     allExpanded = false;
@@ -153,8 +154,8 @@ async function loadLanguage(code) {
     rows = [];
     el.languageGate.classList.remove("hidden");
     el.appLayout.classList.add("hidden");
-    el.sourcePill.textContent = "Data load error";
-    el.gateLanguageGrid.insertAdjacentHTML("beforeend", `<div class="error-box">${escapeHtml(error.message || error)}</div>`);
+    el.sourcePill.textContent = `Data load error · ${APP_VERSION}`;
+    el.gateLanguageGrid.insertAdjacentHTML("beforeend", `<div class="error-box"><strong>${APP_VERSION}</strong><br>${escapeHtml(error.message || error)}</div>`);
   } finally {
     loading = false;
     refreshLanguageButtons();
@@ -169,10 +170,12 @@ async function loadLiveRows(code) {
   const meta = languageMeta(code);
   const range = cleanValue(CONFIG.range) || "A:K";
   const attempts = [];
-  if (cleanValue(meta.gid)) attempts.push({ gid: cleanValue(meta.gid), label: meta.label });
+  // Prefer sheet names first. They survive Google conversion more reliably than pasted GID order.
   (meta.sheetNames || []).forEach(sheet => {
     if (cleanValue(sheet)) attempts.push({ sheet: cleanValue(sheet), label: meta.label });
   });
+  // Keep GID as fallback.
+  if (cleanValue(meta.gid)) attempts.push({ gid: cleanValue(meta.gid), label: meta.label });
   if (!attempts.length) throw new Error(`No sheet configured for ${meta.label || code}.`);
 
   let lastError = null;
@@ -184,7 +187,7 @@ async function loadLiveRows(code) {
       const flowKeys = new Set(parsed.rows.map(r => flowKey(r.flow)));
       const expected = flowOrder().map(flow => flowKey(flow));
       const missing = expected.filter(flow => !flowKeys.has(flow));
-      if (missing.length) throw new Error(`Missing flows: ${missing.join(", ")}`);
+      if (missing.length) throw new Error(`Missing flows after parsing: ${missing.join(", ")}. Parsed rows: ${parsed.rows.length}. Parsed flows: ${[...flowKeys].join(", ")}`);
       return parsed;
     } catch (error) {
       lastError = error;
@@ -287,7 +290,10 @@ function rowsFromFixedColumns(matrix) {
   // The master table order is fixed: Flow, Objective, Inner flow, Step, Trigger, Action, Time, Speech, Reply, No reply, Template.
   const fixedKeys = ["flow", "objective", "inner_flow", "step", "trigger", "action", "time", "speech", "if_reply", "if_no_reply", "template"];
   const output = recordsFromRows(matrix, fixedKeys, 0);
-  if (!output.length) throw new Error("Could not read usable SR follow-up rows from columns A:K. Check that the selected tab has Flow in column A and Step in column D.");
+  if (!output.length) {
+    const sample = matrix.slice(0, 8).map((row, i) => `R${i + 1}: ${(row || []).slice(0, 6).map(cleanValue).join(" | ")}`).join("\n");
+    throw new Error("Could not read usable SR follow-up rows from columns A:K. The app is connected, but the selected tab does not look like the SR follow-up table. First rows loaded:\n" + sample);
+  }
   return { rows: output, labels: { ...DEFAULT_LABELS } };
 }
 
